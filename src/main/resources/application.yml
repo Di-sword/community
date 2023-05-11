@@ -1,7 +1,20 @@
 #datasource
 spring:
+  thymeleaf:
+    cache: false
   datasource:
-    url: jdbc:mysql:///springboot
+    url: jdbc:mysql:///disword-acg
     username: Disword
     password: 1195802831
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    username: disword_acg@163.com
+    password: KEWVVNGZYZYHIJOM
+    host: smtp.163.com
+    default-encoding: UTF-8
+    port: 465
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory

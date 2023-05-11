@@ -19,12 +19,11 @@ public class LoginController {
     public String user_login(HttpServletRequest request,
                              @RequestParam(name = "username") String username,
                              @RequestParam(name = "password") String password){
-        System.out.println(username);
         if (username.equals("123")){
             return "redirect:/";
         }
-        String msg = "用户名不存在";
-        request.getSession().setAttribute("msg",msg);
+        String msg_login_user = "用户名不存在";
+        request.getSession().setAttribute("msg_login_user",msg_login_user);
         return "redirect:login";
 
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.slim.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js" integrity="sha384-7ymO4nGrkm372HoSbq1OY2DP4pEZnMiA+E0F3zPr+JQQtQ82gQ1HPY3QIVtztVua" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row pt-5 pr-5">
+        <div class="col-4">
+        </div>
+        <div class="col pr-5">
+            <form action="/user_register">
+                <div class="form-group ">
+                    <label for="username">用户名</label>
+                    <input type="input" class="form-control" name="username" id="username">
+                    <small id="msg_user" class="form-text text-muted" th:text="${session.msg_register_user}"></small>
+                </div>
+
+                <div class="form-group ">
+                    <label for="email">邮箱</label>
+                    <input type="input" class="form-control" name="email" id="email">
+                    <small id="msg_email" class="form-text text-muted width=%70" th:text="${session.register_email}"></small>
+                    <button type="submit" formaction="/register_code" class="btn btn-success">获取验证码</button><input type="input" class="form-control" name="code" id="code">
+                    <small id="msg_code" class="form-text text-muted" th:text="${session.register_code}"></small>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="password1">密码</label>
+                    <input type="password" class="form-control" name="password1" id="password1">
+                    <small id="msg_psw1" class="form-text text-muted" th:text="${session.register_password1}"></small>
+                </div>
+                <div class="form-group">
+                    <label for="password2">确认密码</label>
+                    <input type="password" class="form-control" name="password2" id="password2">
+                    <small id="msg_paw2" class="form-text text-muted" th:text="${session.register_password2}"></small>
+                </div>
+                <button type="submit" class="btn btn-success">注册</button>
+            </form>
+        </div>
+
+        <div class="col-4">
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
