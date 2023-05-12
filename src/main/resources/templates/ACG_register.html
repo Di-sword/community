@@ -19,15 +19,19 @@
             <form action="/user_register">
                 <div class="form-group ">
                     <label for="username">用户名</label>
-                    <input type="input" class="form-control" name="username" id="username">
-                    <small id="msg_user" class="form-text text-muted" th:text="${session.msg_register_user}"></small>
+                    <input type="input" class="form-control" name="username" id="username" th:value="${session.username}">
+                    <small id="msg_user" class="form-text text-muted" th:text="${session.register_user}"></small>
                 </div>
 
                 <div class="form-group ">
                     <label for="email">邮箱</label>
-                    <input type="input" class="form-control" name="email" id="email">
+                    <input type="input" class="form-control" name="email" id="email" th:value="${session.email}">
                     <small id="msg_email" class="form-text text-muted width=%70" th:text="${session.register_email}"></small>
-                    <button type="submit" formaction="/register_code" class="btn btn-success">获取验证码</button><input type="input" class="form-control" name="code" id="code">
+                    <label for="username">验证码</label>
+                    <div class="input-group">
+                        <input type="text" aria-label="First name" class="form-control" name="code" id="code">
+                        <button type="submit" formaction="/register_code" class="btn btn-success">获取验证码</button>
+                    </div>
                     <small id="msg_code" class="form-text text-muted" th:text="${session.register_code}"></small>
                 </div>
 
@@ -35,13 +39,13 @@
                 <div class="form-group">
                     <label for="password1">密码</label>
                     <input type="password" class="form-control" name="password1" id="password1">
-                    <small id="msg_psw1" class="form-text text-muted" th:text="${session.register_password1}"></small>
                 </div>
                 <div class="form-group">
                     <label for="password2">确认密码</label>
                     <input type="password" class="form-control" name="password2" id="password2">
-                    <small id="msg_paw2" class="form-text text-muted" th:text="${session.register_password2}"></small>
+                    <small id="msg_paw2" class="form-text text-muted" th:text="${session.register_password}"></small>
                 </div>
+                <a href="login">已有账号？点击登录</a>
                 <button type="submit" class="btn btn-success">注册</button>
             </form>
         </div>

@@ -18,3 +18,5 @@ spring:
         smtp:
           socketFactory:
             class: javax.net.ssl.SSLSocketFactory
+  jackson:
+    date-format: yyyy-HH-dd HH:mm:ss
