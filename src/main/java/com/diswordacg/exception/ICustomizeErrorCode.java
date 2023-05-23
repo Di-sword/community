@@ -1,6 +1,8 @@
 package com.diswordacg.exception;
 
-public interface CustomizeErrorCode {
-    String message = null;
+public interface ICustomizeErrorCode {
+
+    String getMessage();
+    Integer getCode();
 
 }

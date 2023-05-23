@@ -5,15 +5,15 @@ import com.diswordacg.mapper.UserMapper;
 import com.diswordacg.model.Email;
 import com.diswordacg.model.User;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
@@ -46,6 +46,7 @@ public class LoginController {
 
     @GetMapping("/user_login")
     public String user_login(HttpServletRequest request,
+                             HttpServletResponse response,
                              @RequestParam(name = "username") String username,
                              @RequestParam(name = "password") String password){
         String login_user;
@@ -56,7 +57,7 @@ public class LoginController {
             request.getSession().setAttribute("login_user",login_user);
             return "redirect:login";
         }
-        user = userMapper.FindNameToUser(username);
+        user = userMapper.findUserByName(username);
         request.getSession().setAttribute("login_user_value",username);
         if (user == null){
             login_user = "用户名不存在";
@@ -77,7 +78,7 @@ public class LoginController {
         }
         request.getSession().removeAttribute("login_password");
         request.getSession().removeAttribute("login_user_value");
-        request.getSession().setAttribute("user",user);
+        response.addCookie(new Cookie("user",user.getU_name()));
         return "redirect:/";
 
 
@@ -85,6 +86,7 @@ public class LoginController {
 
     @GetMapping("/email_login")
     public String email_login(HttpServletRequest request,
+                              HttpServletResponse response,
                               @RequestParam(name = "email") String email,
                               @RequestParam(name = "code") String code){
         request.getSession().setAttribute("email",email);
@@ -122,12 +124,16 @@ public class LoginController {
             request.getSession().setAttribute("login_code",login_code);
             return "redirect:login";
         }
+        user = userMapper.findUserByEmail(email);
+        request.getSession().removeAttribute("login_code");
+        request.getSession().removeAttribute("login_email");
+        response.addCookie(new Cookie("user",user.getU_name()));
         return "redirect:/";
     }
 
     @GetMapping("/login_code")
     public String emailCode(@RequestParam(name = "email") String email,
-                            HttpServletRequest request) throws ParseException {
+                            HttpServletRequest request) throws ParseException{
         String msg_email;
         if (email==null||email.equals("")){
             msg_email = "邮箱不能为空";

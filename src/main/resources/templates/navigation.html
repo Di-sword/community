@@ -1,10 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
 <body>
-$END$
+<div th:fragment="nav">
+    <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #e3f2fd;">
+        <a class="navbar-brand" href="/">主页</a>
+        <div class="collapse navbar-collapse mx-5" id="navbarSupportedContent">
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="想搜些什么呢" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+            </form>
+        </div>
+        <div class="collapse navbar-collapse text-right border-right-0" style="margin-left: 60%" >
+            <ul class="navbar-nav ">
+                <tr th:if="${session.user == null}">
+                    <li class="nav-item active"  >
+                        <a class="navbar-brand" style="size: 6px" href="login">未登录</a>
+                    </li>
+                </tr>
+                <tr th:if="${session.user != null}">
+                    <li class="nav-item dropdown">
+                        <div class="dropdown">
+                            <button th:text="${session.user.getU_name()}" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <th:block th:switch="${session.user.getU_authority()}">
+                                    <a class="dropdown-item disabled" th:case="0">权限:普通用户</a>
+                                    <a class="dropdown-item disabled" th:case="1">权限:管理员</a>
+                                    <a class="dropdown-item disabled" th:case="2">权限:站长</a>
+                                </th:block>
+                                <a class="dropdown-item" href="/profile/posts">个人中心</a>
+                                <a class="dropdown-item" href="/publish">发帖</a>
+                                <div class="dropdown-divider"></div>
+                                <th:block th:if="${session.user.getU_authority()} ge 1">
+                                    <a class="dropdown-item" href="addblock">添加板块</a>
+                                    <a class="dropdown-item" href="updateblock">板块管理</a>
+                                    <div class="dropdown-divider"></div>
+                                </th:block>
+                                <th:block th:if="${session.user.getU_authority()} ge 2">
+                                    <a class="dropdown-item" href="">用户管理</a>
+                                    <div class="dropdown-divider"></div>
+                                </th:block>
+                                <a class="dropdown-item" href="loginOut">退出登录</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item" style="margin-left: 5px" th:if="${session.user.getU_touxiang() == null}">
+                        <img src="image/akalin.png" class="img-circle" width="40" height="40">
+                    </li>
+                    <li class="nav-item" style="margin-left: 5px" th:if="${session.user.getU_touxiang() != null}">
+                        <img th:src="@{'image/'+${session.user.getU_touxiang()}}" class="img-circle" width="40" height="40">
+                    </li>
+                </tr>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+</div>
+
 </body>
 </html>

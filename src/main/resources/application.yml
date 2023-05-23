@@ -20,3 +20,11 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
   jackson:
     date-format: yyyy-HH-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  mvc:
+    static-path-pattern: /image/**
+  web:
+    resources:
+      static-locations: file:D:\Disword\Disword-ACG\src\main\resources\static\img\

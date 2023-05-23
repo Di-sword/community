@@ -1,40 +1,13 @@
 package com.diswordacg.model;
 
-public class Plate {
+import lombok.Data;
+
+@Data
+public class Block {
     private int id;
-    private String plate;
-    private String zone;
+    private String block;
+    private int zone;
     private String icon;
+    private String introduce;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getPlate() {
-        return plate;
-    }
-
-    public void setPlate(String plate) {
-        this.plate = plate;
-    }
-
-    public String getZone() {
-        return zone;
-    }
-
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
 }

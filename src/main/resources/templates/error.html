@@ -10,8 +10,9 @@
 <body>
 <div class="jumbotron">
     <h1 class="display-4">发生错误</h1>
-    <p class="lead" th:text="${#messages}">发生了预料之外的错误，请稍后再试</p>
+    <p class="lead">发生了预料之外的错误，请稍后再试</p>
     <hr class="my-4">
+    <p  th:text="${message}"></p>
     <a class="btn btn-primary btn-lg" href="/" role="button">返回主页
     </a>
 </div>

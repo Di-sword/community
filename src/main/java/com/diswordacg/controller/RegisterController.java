@@ -50,14 +50,14 @@ public class RegisterController {
                                 HttpServletRequest request){
         request.getSession().setAttribute("email",email);
         request.getSession().setAttribute("username",username);
-        user = userMapper.FindNameToUser(username);
+        user = userMapper.findUserByName(username);
         if (user!=null){
             String register_user;
             register_user="该用户名已被使用";
             request.getSession().setAttribute("register_user",register_user);
             return "ACG_register";
         }
-        user = userMapper.FindEmailToUser(email);
+        user = userMapper.findUserByEmail(email);
         if (user!=null){
             String register_email;
             register_email="该邮箱已注册";
