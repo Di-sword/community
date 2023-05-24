@@ -15,14 +15,15 @@
         margin-top: 3%;
         background-color: #e3f2fd;
     }
+
 </style>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #e3f2fd;">
     <a class="navbar-brand" href="/">主页</a>
     <div class="collapse navbar-collapse mx-5" id="navbarSupportedContent">
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="想搜些什么呢" aria-label="Search">
+        <form class="form-inline my-2 my-lg-0" action="/selectPost">
+            <input class="form-control mr-sm-2" name="select" type="search" placeholder="想搜些什么呢" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
         </form>
     </div>
@@ -48,11 +49,11 @@
                             <a class="dropdown-item" href="../../publish">发帖</a>
                             <div class="dropdown-divider"></div>
                             <th:block th:if="${session.user.getU_authority()} ge 1">
-                                <a class="dropdown-item" href="#">添加板块</a>
+                                <a class="dropdown-item" href="../addblock">添加板块</a>
                                 <div class="dropdown-divider"></div>
                             </th:block>
                             <th:block th:if="${session.user.getU_authority()} ge 2">
-                                <a class="dropdown-item" href="">用户管理</a>
+                                <a class="dropdown-item" href="/userManagement">用户管理</a>
                                 <div class="dropdown-divider"></div>
                             </th:block>
                             <a class="dropdown-item" href="../../loginOut">退出登录</a>
@@ -91,11 +92,61 @@
             </div>
             <span style="float: right;color: #10707f;font-size: 4px">发布时间:[[${#dates.format(Comment_postDTO.release_time,'yyyy-MM-dd HH:mm')}]]</span>
         </div>
-        <div class="dropdown-divider" style="border-top: 1px solid black;"></div>
-            <div id="comment_section">
+        <h6>
+            <span >[[${Comment_postDTO.comment_count}]]个回复</span>
+        </h6>
+        <th:block th:each="comment:${comments}">
+            <div class="dropdown-divider" style="border-top: 1px solid black;"></div>
+            <div class="media" style="margin-left: 10px;height:auto" th:id="${'comment-body-'+comment.id}">
+                <img  width="50" height="50" th:if="${comment.user.getU_touxiang() != null}"  th:src="@{'../../image/'+${comment.user.getU_touxiang()}}" class="align-self-start mr-3">
+                <img  width="50" height="50" th:if="${comment.user.getU_touxiang() == null}"  src="../../image/akalin.png" class="align-self-start mr-3">
+                <div class="media-body">
+                    <h5 th:text="${comment.user.u_name}"></h5>
+                    <pre style="white-space: pre-wrap" th:text="${comment.content}"></pre>
+
+                </div>
+                <span style="float: right;color: #10707f;font-size: 4px">[[${#dates.format(comment.gmt_create,'yyyy-MM-dd HH:mm')}]]</span>
+            </div>
+            <button onclick="collapseComments(this)" style="margin-left: 15px" class="btn btn-link" th:data-id="${comment.id}"
+                    type="button" data-toggle="collapse"
+                    th:data-target="${'#comment-'+comment.id}"
+                    aria-expanded="false" aria-controls="collapseExample">
+                    <i class="bi bi-chat-right-dots"></i>
+            </button>
+                    <!--二级评论-->
+            <div class="collapse row" th:id="${'comment-'+comment.id}">
+                <div class="col-1"></div>
+                <div class="col">
+                    <div class="card" style="background-color: #e3f2fd"th:id="${'for-'+comment.id}">
+                                    <!--循环内容-->
+<!--                        <div class="media" style="margin-left: 10px;height:auto;padding-top: 15px" >-->
+<!--                                <img  width="50" height="50" th:src="@{'../../image/'+${comment.user.getU_touxiang()}}" class="align-self-start mr-3">-->
+<!--                                <img  width="50" height="50" th:if="${comment.user.getU_touxiang() == null}"  src="../../image/akalin.png" class="align-self-start mr-3">-->
+<!--                                <div class="media-body">-->
+<!--                                    <h5>二级评论</h5>-->
+<!--                                    <pre style="white-space: pre-wrap">感觉。。。</pre>-->
+<!--                                </div>-->
+<!--                                <span style="float: right;color: #10707f;font-size: 4px;padding-right: 15px;">[[${#dates.format(comment.gmt_create,'yyyy-MM-dd HH:mm')}]]</span>-->
+<!--                        <div class="dropdown-divider" style="border-top: 1px solid black;margin-top: 25px"></div>-->
+<!--                        </div>-->
+
+                        <div>
+                            <input class="form-control" th:id="${'input-'+comment.id}" style="background-color: #e8f8ff;width:95%; margin-right: auto;margin-left: auto;margin-top: 10px" type="text">
+                            <button type="button" onclick="comment(this)" th:data-id="${comment.id}" class="btn btn-light" style="background-color:#e3f2fd;float: right;margin-top: 10px;margin-bottom:10px;margin-right: 15px">回复</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
+        </th:block>
+
+        <div class="dropdown-divider" style="border-top: 1px solid black;margin-top: 25px"></div>
+
+            <div id="comment_section" th:if="${session.user != null}">
                 <div class="media" style="margin-left: 10px;height:auto">
-                    <input type="hidden" id="post_id" th:value="${session.user.getU_id()}">
-                    <img  width="50" height="50" th:if="${session.user.getU_touxiang() != null}"  th:src="@{'../../image/'+${Comment_postDTO.user.getU_touxiang()}}" class="align-self-start mr-3">
+                    <input type="hidden" id="post_id" th:value="${Comment_postDTO.id}">
+                    <img  width="50" height="50" th:if="${session.user.getU_touxiang() != null}"  th:src="@{'../../image/'+${session.user.getU_touxiang()}}" class="align-self-start mr-3">
                     <img  width="50" height="50" th:if="${session.user.getU_touxiang() == null}"  src="../../image/akalin.png" class="align-self-start mr-3">
                     <div class="media-body">
                         <h5 th:text="${session.user.getU_name()}"></h5>
@@ -117,30 +168,126 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    function post(){
-        var post_id = $("#post_id").val();
-        var content = $("#comment_content").val();
+
+    function comment2Target(targetId,type,content){
+        if (!content){
+            alert("不能回复空内容哦");
+            return;
+        }
         $.ajax({
             type: "POST",
             url: "/comment",
             contentType: 'application/json',
             data: JSON.stringify({
-                "parentId": post_id,
+                "parentId": targetId,
                 "content": content,
-                "type": 1
+                "type": type
             }),
             success:function (response){
                 if (response.code == 200){
-                    alert(response.message);
-                    $("#comment_section").hide();
+                    alert("发送成功");
+                    window.location.reload();
                 }else {
-                    alert("错误");
+                    if (response.code == 2003){
+                        var nologin = confirm(response.message);
+                        if (nologin){
+                            window.open("/login");
+                        }
+                    }
                 }
                 console.log(response.message);
             }
         });
     }
+    function post(){
+        var post_id = $("#post_id").val();
+        var content = $("#comment_content").val();
+        comment2Target(post_id,1,content);
+    }
+    function comment(e){
+        var commentId = e.getAttribute("data-id");
+        var content = $("#input-"+commentId).val();
+        comment2Target(commentId,2,content);
+    }
+    function collapseComments(e){
 
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+
+        var id = e.getAttribute("data-id");
+        var comments = $("#comment-"+id);
+        var collapse = e.getAttribute("aria-expanded");
+        if (collapse){
+            var subCommentContainer = $("#for-"+id);
+            if (subCommentContainer.children().length > 2){
+            }else {
+                $.getJSON("/comment/"+id,function (data){
+                    $.each(data.data.reverse(),function (index,comment){
+                        var c = $("<div/>",{
+                            "class":"media",
+                            "style":"margin-left: 10px;height:auto;padding-top: 15px"
+                        });
+                        if (comment.user.u_touxiang != null){
+                            var touxiang = $("<img/>",{
+                                width:50,
+                                height:50,
+                                class:"align-self-start mr-3",
+                                src:"../../image/"+comment.user.u_touxiang
+                            });
+                        }else if (comment.user.u_touxiang == null){
+                            var touxiang = $("<img/>",{
+                                width:50,
+                                height:50,
+                                class:"align-self-start mr-3",
+                                src:"../../image/akalin.png"
+                            });
+                        }
+                        c.append(touxiang);
+                        var media = $("<div/>",{
+                            class:"media-body"
+                        });
+                        var name = $("<h5/>",{
+                            text:comment.user.u_name
+                        });
+                        var pre = $("<pre/>",{
+                            text: comment.content,
+                            style: "white-space: pre-wrap"
+                        });
+                        media.append(name);
+                        media.append(pre);
+                        c.append(media);
+                        var time = $("<span/>",{
+                            style:"float: right;color: #10707f;font-size: 4px;padding-right: 15px;",
+                            text:new Date(comment.gmt_create).Format("yyyy-MM-dd HH:mm")
+                        });
+                        c.append(time);
+                        var fengexian = $("<div/>",{
+                            class : "dropdown-divider",
+                            style : "border-top: 1px solid #006666;"
+                        });
+                        subCommentContainer.prepend(fengexian);
+                        subCommentContainer.prepend(c);
+
+                    });
+
+                });
+            }
+        }
+
+    }
 </script>
 </body>
 </html>

@@ -91,14 +91,13 @@
                 document.fileForm.submit();
             }
         }
-
         document.getElementById("fenqu").onclick= function () {
             //定位到下拉列表,获取下拉框的值
             var index = this.selectedIndex;
             //获取下拉框值
             var fenqu = this.options[index].innerHTML;
             if (fenqu!="选择分区"){
-                //由于每次都会自动添加，因此每次在调用的时候清楚
+                //由于每次都会自动添加，因此每次在调用的时候清除
                 var citySelect = document.getElementById("bankuai");
                 //每次将option变成长度为 1
                 citySelect.options.length = 1;
@@ -117,6 +116,7 @@
                 });
             }
         }
+
         function showFilename(file){
             $("#upload_img").html(file.name);
         }

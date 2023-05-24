@@ -5,8 +5,8 @@
     <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #e3f2fd;">
         <a class="navbar-brand" href="/">主页</a>
         <div class="collapse navbar-collapse mx-5" id="navbarSupportedContent">
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="想搜些什么呢" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" action="/selectPost">
+                <input class="form-control mr-sm-2" name="select" type="search" placeholder="想搜些什么呢" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
             </form>
         </div>
@@ -37,7 +37,7 @@
                                     <div class="dropdown-divider"></div>
                                 </th:block>
                                 <th:block th:if="${session.user.getU_authority()} ge 2">
-                                    <a class="dropdown-item" href="">用户管理</a>
+                                    <a class="dropdown-item" href="userManagement">用户管理</a>
                                     <div class="dropdown-divider"></div>
                                 </th:block>
                                 <a class="dropdown-item" href="loginOut">退出登录</a>

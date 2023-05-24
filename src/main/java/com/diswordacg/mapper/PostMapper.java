@@ -30,6 +30,12 @@ public interface PostMapper {
     @Select("select * from post where creator_id=#{creator_id}")
     List<Post> findPostById2(@Param(value = "creator_id") Integer id);
 
+    @Select("select * from post where title like #{title} limit #{offset},#{size}")
+    List<Post> findPostByTitle(@Param(value = "title") String title,@Param(value = "offset") int offset,@Param(value = "size") int size);
+
+    @Select("select * from post where title like #{title}")
+    List<Post> findPostByTitle2(@Param(value = "title") String title);
+
     @Select("select * from post where id=#{id}")
     Post findPostById(@Param("id") Integer id);
 
@@ -42,6 +48,9 @@ public interface PostMapper {
 
     @Select("select count(1) from post where creator_id=#{creator_id}")
     Integer countById(@Param(value = "creator_id") Integer id);
+
+    @Select("select count(1) from post where title like #{title}")
+    Integer countByTitle(@Param(value = "title")String title);
 
 
 

@@ -7,6 +7,7 @@ import com.diswordacg.mapper.ZoneMapper;
 import com.diswordacg.model.Block;
 import com.diswordacg.model.Post;
 import com.diswordacg.model.User;
+import com.vdurmont.emoji.EmojiParser;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +119,6 @@ public class PublishController {
 //        System.out.println(path);
 
         int z = zoneMapper.findIdToZone(zone);
-
         Date date = new Date();
         post0.setCreator_id(user.getU_id());
         post0.setCreator_name(user.getU_name());

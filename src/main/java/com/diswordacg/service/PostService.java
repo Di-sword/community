@@ -120,4 +120,41 @@ public class PostService {
         post.setView_count(view_count);
         postMapper.AddPostView(post);
     }
+
+    public PaginationDTO select(String selectName,Integer page,Integer size) {
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalCount = postMapper.countByTitle("%"+selectName+"%");
+        Integer totalPage;
+        if (totalCount%size == 0 || totalCount<size){
+            totalPage = totalCount / size;
+        }else {
+            totalPage = totalCount / size + 1;
+        }
+        if (page<1){
+            page = 1;
+        }
+        if (page>totalPage){
+            page=totalPage;
+        }
+        paginationDTO.setPagination(totalPage,page);
+        int offset = size * (page - 1);
+        List<Post> postList = new ArrayList<>();
+        if (totalCount < size){
+            postList = postMapper.findPostByTitle2("%"+selectName+"%");
+        }else {
+            postList = postMapper.findPostByTitle("%"+selectName+"%",offset,size);
+        }
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for (Post post : postList) {
+            User user = userMapper.findUserById(post.getCreator_id());
+            PostDTO postDTO = new PostDTO();
+            BeanUtils.copyProperties(post,postDTO);
+            postDTO.setUser(user);
+            postDTOList.add(postDTO);
+        }
+        paginationDTO.setPostDTOList(postDTOList);
+
+        return paginationDTO;
+
+    }
 }

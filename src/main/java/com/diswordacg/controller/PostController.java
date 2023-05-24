@@ -3,8 +3,10 @@ package com.diswordacg.controller;
 import com.diswordacg.dto.PaginationDTO;
 import com.diswordacg.dto.PostDTO;
 import com.diswordacg.mapper.BlockMapper;
+import com.diswordacg.mapper.PostMapper;
 import com.diswordacg.mapper.UserMapper;
 import com.diswordacg.model.Block;
+import com.diswordacg.model.Post;
 import com.diswordacg.model.User;
 import com.diswordacg.service.PostService;
 import jakarta.servlet.http.Cookie;
@@ -27,6 +29,8 @@ public class PostController {
     private PostService postService;
     @Autowired
     private BlockMapper blockMapper;
+    @Autowired
+    private PostMapper postMapper;
 
     @GetMapping("/post/{block}")
     public String post(@PathVariable(name = "block") String block,
@@ -49,12 +53,12 @@ public class PostController {
         }
 
         PaginationDTO paginationDTO = postService.findPostDTOByBlock(block,page,size);
-
+        List<Post> postSize = postMapper.findPostByBlock2(block);
         Block block1 = blockMapper.findBlockByBlock(block);
 
         request.getSession().setAttribute("paginationDTO",paginationDTO);
         request.getSession().setAttribute("block",block1);
-        model.addAttribute("",paginationDTO);
+        request.getSession().setAttribute("postSize",postSize);
         return "ACG_post";
     }
 
